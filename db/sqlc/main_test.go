@@ -3,13 +3,10 @@ package db
 import (
 	"context"
 	"os"
+	"simplebank/util"
 	"testing"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-)
-
-const (
-	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
 )
 
 var testDB *pgxpool.Pool
@@ -17,8 +14,9 @@ var testQueries *Queries
 
 func TestMain(m *testing.M) {
 	var err error
+	config, err := util.LoadConfig("../..")
 	ctx := context.Background()
-	testDB, err = pgxpool.New(ctx, dbSource)
+	testDB, err = pgxpool.New(ctx, config.DBSource)
 	if err != nil {
 		panic(err)
 	}
