@@ -159,3 +159,34 @@ func (q *Queries) transferMoney(ctx context.Context,
 	}
 	return
 }
+
+func (store *Store) GetAccount(ctx context.Context, id int64) (Account, error) {
+	account, err := store.q.GetAccount(ctx, id)
+	if err != nil {
+		return Account{}, err
+	}
+	return account, nil
+}
+
+func (store *Store) CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error) {
+	account, err := store.q.CreateAccount(ctx, arg)
+	if err != nil {
+		return Account{}, err
+	}
+	return account, nil
+}
+
+func (store *Store) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]Account, error) {
+	accounts, err := store.q.ListAccounts(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+	return accounts, nil
+}
+func (store *Store) AddAccountBalance(ctx context.Context, arg AddAccountBalanceParams) (Account, error) {
+	account, err := store.q.AddAccountBalance(ctx, arg)
+	if err != nil {
+		return Account{}, err
+	}
+	return account, nil
+}
