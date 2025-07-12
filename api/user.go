@@ -4,22 +4,23 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgtype"
 	db "github.com/mahanth/simplebank/db/sqlc"
 	"github.com/mahanth/simplebank/util"
 )
 
 type CreateUserRequest struct {
-	UserName string `json:"username" binding:"required"`
+	UserName string `json:"username" binding:"required,alphanum"`
 	FullName string `json:"full_name" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,min=6"`
 }
 
 type CreateUserResponse struct {
-	Username  string `json:"username"`
-	FullName  string `json:"full_name"`
-	Email     string `json:"email"`
-	CreatedAt string `json:"created_at"`
+	Username  string             `json:"username"`
+	FullName  string             `json:"full_name"`
+	Email     string             `json:"email"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
 func (server *Server) createUser(ctx *gin.Context) {
@@ -51,7 +52,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 		Username:  user.Username,
 		FullName:  user.FullName,
 		Email:     user.Email,
-		CreatedAt: user.CreatedAt.Time.String(),
+		CreatedAt: user.CreatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, response)
