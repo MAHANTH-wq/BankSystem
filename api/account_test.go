@@ -38,6 +38,7 @@ func TestGetAccountAPI(t *testing.T) {
 			},
 		},
 		{
+			//Check Signature for the commits
 			name:      "NotFound",
 			accountID: account.ID,
 			buildStubs: func(store *mockdb.MockStore) {
