@@ -3,9 +3,10 @@ package db
 import (
 	"context"
 	"fmt"
-	"simplebank/util"
 	"sync"
 	"testing"
+
+	"github.com/mahanth/simplebank/util"
 
 	"github.com/stretchr/testify/require"
 )
@@ -80,7 +81,7 @@ func TestTransferTx(t *testing.T) {
 		require.NotZero(t, result.Transfer.ID)
 		require.NotZero(t, result.Transfer.CreatedAt)
 
-		_, err = store.q.GetTransfer(context.Background(), result.Transfer.ID)
+		_, err = store.GetTransfer(context.Background(), result.Transfer.ID)
 		require.NoError(t, err)
 
 		//Check the entries created for the transfer

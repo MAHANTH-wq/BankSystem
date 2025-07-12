@@ -6,22 +6,27 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+type Store interface {
+	Querier
+	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
+}
+
 // Inheritance from Queries struct
-type Store struct {
+type SQLStore struct {
 	q  *Queries
 	db *pgxpool.Pool
 }
 
-func NewStore(db *pgxpool.Pool) *Store {
+func NewStore(db *pgxpool.Pool) Store {
 	q := New(db)
-	return &Store{
+	return &SQLStore{
 		q:  q,
 		db: db,
 	}
 }
 
 // execTx executes a function within a transaction context.
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.Begin(ctx)
 	if err != nil {
 		return err
@@ -62,7 +67,7 @@ type TransferTxResult struct {
 }
 
 // TranferTx performs a money transfer from one account to another within a transaction context.
-func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 	err := store.execTx(ctx, func(q *Queries) error {
 		var err error
@@ -160,7 +165,7 @@ func (q *Queries) transferMoney(ctx context.Context,
 	return
 }
 
-func (store *Store) GetAccount(ctx context.Context, id int64) (Account, error) {
+func (store *SQLStore) GetAccount(ctx context.Context, id int64) (Account, error) {
 	account, err := store.q.GetAccount(ctx, id)
 	if err != nil {
 		return Account{}, err
@@ -168,7 +173,7 @@ func (store *Store) GetAccount(ctx context.Context, id int64) (Account, error) {
 	return account, nil
 }
 
-func (store *Store) CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error) {
+func (store *SQLStore) CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error) {
 	account, err := store.q.CreateAccount(ctx, arg)
 	if err != nil {
 		return Account{}, err
@@ -176,15 +181,84 @@ func (store *Store) CreateAccount(ctx context.Context, arg CreateAccountParams) 
 	return account, nil
 }
 
-func (store *Store) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]Account, error) {
+func (store *SQLStore) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]Account, error) {
 	accounts, err := store.q.ListAccounts(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 	return accounts, nil
 }
-func (store *Store) AddAccountBalance(ctx context.Context, arg AddAccountBalanceParams) (Account, error) {
+func (store *SQLStore) AddAccountBalance(ctx context.Context, arg AddAccountBalanceParams) (Account, error) {
 	account, err := store.q.AddAccountBalance(ctx, arg)
+	if err != nil {
+		return Account{}, err
+	}
+	return account, nil
+}
+
+func (store *SQLStore) DeleteAccount(ctx context.Context, id int64) error {
+	err := store.q.DeleteAccount(ctx, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (store *SQLStore) UpdateAccount(ctx context.Context, arg UpdateAccountParams) (Account, error) {
+	account, err := store.q.UpdateAccount(ctx, arg)
+	if err != nil {
+		return Account{}, err
+	}
+	return account, nil
+}
+
+func (store *SQLStore) GetEntry(ctx context.Context, id int64) (Entry, error) {
+	entry, err := store.q.GetEntry(ctx, id)
+	if err != nil {
+		return Entry{}, err
+	}
+	return entry, nil
+}
+func (store *SQLStore) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry, error) {
+	entry, err := store.q.CreateEntry(ctx, arg)
+	if err != nil {
+		return Entry{}, err
+	}
+	return entry, nil
+}
+func (store *SQLStore) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Entry, error) {
+	entries, err := store.q.ListEntries(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+	return entries, nil
+}
+
+func (store *SQLStore) GetTransfer(ctx context.Context, id int64) (Transfer, error) {
+	transfer, err := store.q.GetTransfer(ctx, id)
+	if err != nil {
+		return Transfer{}, err
+	}
+	return transfer, nil
+}
+
+func (store *SQLStore) ListTransfers(ctx context.Context, arg ListTransfersParams) ([]Transfer, error) {
+	transfers, err := store.q.ListTransfers(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+	return transfers, nil
+}
+
+func (store *SQLStore) CreateTransfer(ctx context.Context, arg CreateTransferParams) (Transfer, error) {
+	transfer, err := store.q.CreateTransfer(ctx, arg)
+	if err != nil {
+		return Transfer{}, err
+	}
+	return transfer, nil
+}
+
+func (store *SQLStore) GetAccountForUpdate(ctx context.Context, id int64) (Account, error) {
+	account, err := store.q.GetAccountForUpdate(ctx, id)
 	if err != nil {
 		return Account{}, err
 	}

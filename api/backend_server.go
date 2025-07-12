@@ -1,18 +1,18 @@
 package api
 
 import (
-	db "simplebank/db/sqlc"
+	db "github.com/mahanth/simplebank/db/sqlc"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Server struct {
-	store  *db.Store
+	store  db.Store
 	router *gin.Engine
 }
 
 // Function to create a new server instance
-func NewServer(store *db.Store) *Server {
+func NewServer(store db.Store) *Server {
 	server := &Server{
 		store: store,
 	}

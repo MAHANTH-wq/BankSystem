@@ -3,8 +3,9 @@ package db
 import (
 	"context"
 	"os"
-	"simplebank/util"
 	"testing"
+
+	"github.com/mahanth/simplebank/util"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

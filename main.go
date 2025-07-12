@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
-	"simplebank/api"
-	db "simplebank/db/sqlc"
-	"simplebank/util"
+
+	db "github.com/mahanth/simplebank/db/sqlc"
+	"github.com/mahanth/simplebank/util"
+
+	"github.com/mahanth/simplebank/api"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

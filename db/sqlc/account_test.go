@@ -2,8 +2,9 @@ package db
 
 import (
 	"context"
-	"simplebank/util"
 	"testing"
+
+	"github.com/mahanth/simplebank/util"
 
 	"github.com/stretchr/testify/require"
 )
