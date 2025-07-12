@@ -26,6 +26,9 @@ func RandomOwner() string {
 	return RandomString(6)
 }
 
+func RandomEmail() string {
+	return RandomString(6) + "@example.com"
+}
 func RandomCurrency() string {
 	currencies := []string{"USD", "EUR", "CAD", "AUD", "JPY"}
 	n := len(currencies)

@@ -6,29 +6,18 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/mahanth/simplebank/util"
-
 	"github.com/stretchr/testify/require"
 )
 
 func TestTransferTx(t *testing.T) {
 	// create two accounts to transfer between
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account1 := createRandomAccount(t)
 	require.NotEmpty(t, account1)
 	require.NotZero(t, account1.ID)
 
 	// Create a second account to transfer to
-	account2, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account2 := createRandomAccount(t)
+
 	require.NotEmpty(t, account2)
 	require.NotZero(t, account2.ID)
 
@@ -134,22 +123,13 @@ func TestTransferTx(t *testing.T) {
 
 func TestTransferTxDeadlock(t *testing.T) {
 	// create two accounts to transfer between
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account1 := createRandomAccount(t)
 	require.NotEmpty(t, account1)
 	require.NotZero(t, account1.ID)
 
 	// Create a second account to transfer to
-	account2, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account2 := createRandomAccount(t)
+
 	require.NotEmpty(t, account2)
 	require.NotZero(t, account2.ID)
 

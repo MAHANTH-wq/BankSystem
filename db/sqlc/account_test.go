@@ -10,32 +10,12 @@ import (
 )
 
 func TestCreateAccount(t *testing.T) {
-	arg := CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	}
-
-	account, err := testQueries.CreateAccount(context.Background(), arg)
-
-	require.NoError(t, err)
-	require.NotEmpty(t, account)
-	require.Equal(t, arg.Owner, account.Owner)
-	require.Equal(t, arg.Balance, account.Balance)
-	require.Equal(t, arg.Currency, account.Currency)
-	require.NotZero(t, account.ID)
-	require.NotZero(t, account.CreatedAt)
+	//create a user first
+	createRandomAccount(t)
 }
 
 func TestGetAccount(t *testing.T) {
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-
-	require.NoError(t, err)
-	require.NotEmpty(t, account1)
+	account1 := createRandomAccount(t)
 
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
 
@@ -50,13 +30,8 @@ func TestGetAccount(t *testing.T) {
 }
 
 func TestUpdateAccount(t *testing.T) {
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
+	account1 := createRandomAccount(t)
 
-	require.NoError(t, err)
 	require.NotEmpty(t, account1)
 
 	arg := UpdateAccountParams{
@@ -79,16 +54,11 @@ func TestUpdateAccount(t *testing.T) {
 }
 
 func TestDeleteAccount(t *testing.T) {
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
+	account1 := createRandomAccount(t)
 
-	require.NoError(t, err)
 	require.NotEmpty(t, account1)
 
-	err = testQueries.DeleteAccount(context.Background(), account1.ID)
+	err := testQueries.DeleteAccount(context.Background(), account1.ID)
 	require.NoError(t, err)
 
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
@@ -98,13 +68,8 @@ func TestDeleteAccount(t *testing.T) {
 
 func TestListAccounts(t *testing.T) {
 	for i := 0; i < 10; i++ {
-		_, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-			Owner:    util.RandomOwner(),
-			Balance:  util.RandomBalance(),
-			Currency: util.RandomCurrency(),
-		})
+		createRandomAccount(t)
 
-		require.NoError(t, err)
 	}
 	accounts, err := testQueries.ListAccounts(context.Background(), ListAccountsParams{
 		Limit:  5,
@@ -120,4 +85,22 @@ func TestListAccounts(t *testing.T) {
 		require.NotEmpty(t, account.Currency)
 		require.NotZero(t, account.Balance)
 	}
+}
+
+func createRandomAccount(t *testing.T) Account {
+	user := createRandomUser(t)
+	arg := CreateAccountParams{
+		Owner:    user.Username,
+		Balance:  util.RandomBalance(),
+		Currency: util.RandomCurrency(),
+	}
+	account, err := testQueries.CreateAccount(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, account)
+	require.Equal(t, arg.Owner, account.Owner)
+	require.Equal(t, arg.Balance, account.Balance)
+	require.Equal(t, arg.Currency, account.Currency)
+	require.NotZero(t, account.ID)
+	require.NotZero(t, account.CreatedAt)
+	return account
 }

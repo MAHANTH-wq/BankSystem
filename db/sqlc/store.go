@@ -264,3 +264,19 @@ func (store *SQLStore) GetAccountForUpdate(ctx context.Context, id int64) (Accou
 	}
 	return account, nil
 }
+
+func (store *SQLStore) GetUser(ctx context.Context, username string) (User, error) {
+	user, err := store.q.GetUser(ctx, username)
+	if err != nil {
+		return User{}, err
+	}
+	return user, nil
+}
+
+func (store *SQLStore) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	user, err := store.q.CreateUser(ctx, arg)
+	if err != nil {
+		return User{}, err
+	}
+	return user, nil
+}

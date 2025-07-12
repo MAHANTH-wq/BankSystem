@@ -11,20 +11,10 @@ import (
 
 func TestCreateTransfer(t *testing.T) {
 	// create two accounts to transfer between
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account1 := createRandomAccount(t)
 	require.NotEmpty(t, account1)
 	require.NotZero(t, account1.ID)
-	account2, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account2 := createRandomAccount(t)
 	require.NotEmpty(t, account2)
 	require.NotZero(t, account2.ID)
 	arg := CreateTransferParams{
@@ -44,20 +34,12 @@ func TestCreateTransfer(t *testing.T) {
 
 func TestGetTransfer(t *testing.T) {
 	// create two accounts to transfer between
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account1 := createRandomAccount(t)
+
 	require.NotEmpty(t, account1)
 	require.NotZero(t, account1.ID)
-	account2, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account2 := createRandomAccount(t)
+
 	require.NotEmpty(t, account2)
 	require.NotZero(t, account2.ID)
 
@@ -83,20 +65,11 @@ func TestGetTransfer(t *testing.T) {
 
 func TestListTransfers(t *testing.T) {
 	// create two accounts to transfer between
-	account1, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account1 := createRandomAccount(t)
 	require.NotEmpty(t, account1)
 	require.NotZero(t, account1.ID)
-	account2, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account2 := createRandomAccount(t)
+
 	require.NotEmpty(t, account2)
 	require.NotZero(t, account2.ID)
 

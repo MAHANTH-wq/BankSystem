@@ -11,12 +11,8 @@ import (
 
 func TestCreateEntry(t *testing.T) {
 	// create an account to associate with the entry
-	account, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account := createRandomAccount(t)
+
 	require.NotEmpty(t, account)
 	require.NotZero(t, account.ID)
 
@@ -37,12 +33,7 @@ func TestCreateEntry(t *testing.T) {
 
 func TestGetEntry(t *testing.T) {
 	// create an account to associate with the entry
-	account, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account := createRandomAccount(t)
 	require.NotEmpty(t, account)
 	require.NotZero(t, account.ID)
 
@@ -67,12 +58,7 @@ func TestGetEntry(t *testing.T) {
 
 func TestListEntries(t *testing.T) {
 	// create an account to associate with the entries
-	account, err := testQueries.CreateAccount(context.Background(), CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomBalance(),
-		Currency: util.RandomCurrency(),
-	})
-	require.NoError(t, err)
+	account := createRandomAccount(t)
 	require.NotEmpty(t, account)
 	require.NotZero(t, account.ID)
 
