@@ -1,28 +1,56 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/go-playground/validator/v10"
 	db "github.com/mahanth/simplebank/db/sqlc"
+	"github.com/mahanth/simplebank/token"
+	"github.com/mahanth/simplebank/util"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 )
 
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	config     util.Config
+	store      db.Store
+	router     *gin.Engine
+	tokenMaker token.Maker
 }
 
 // Function to create a new server instance
-func NewServer(store db.Store) *Server {
-	server := &Server{
-		store: store,
+func NewServer(config util.Config, store db.Store) (*Server, error) {
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
+	fmt.Println(err)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker for server")
 	}
-	router := gin.Default()
+
+	server := &Server{
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
+	}
+
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("currency", validCurrency)
 	}
 
+	server.setUpRouter()
+
+	return server, nil
+}
+
+// Function to start the http server on port address to start serving requests
+func (server *Server) Start(address string) error {
+	return server.router.Run(address)
+}
+
+//Function Set Up Server
+
+func (server *Server) setUpRouter() {
+	router := gin.Default()
 	// Routes defined for the server
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
@@ -30,14 +58,10 @@ func NewServer(store db.Store) *Server {
 	router.PUT("/addbalance", server.addAccountBalance)
 	router.POST("/transfers", server.createTransfer)
 	router.POST("/users", server.createUser)
+	router.POST("/users/login", server.loginUser)
 
 	server.router = router
-	return server
-}
 
-// Function to start the http server on port address to start serving requests
-func (server *Server) Start(address string) error {
-	return server.router.Run(address)
 }
 
 // gin.H is a shortcut for map[string]interface{}
