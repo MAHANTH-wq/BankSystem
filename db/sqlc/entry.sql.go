@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	_ "github.com/lib/pq"
 )
 
 const createEntry = `-- name: CreateEntry :one
