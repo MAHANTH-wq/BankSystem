@@ -27,7 +27,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
       with:
-        role-to-assume: ${{ secrets.AWS_ASSUME_ROLE_ARN}}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: "us-east-2"
 
     - name: Login to Amazon ECR
@@ -50,7 +51,8 @@ jobs:
     
     - name: Deploy Image to Amazon EKS
       run: |
-        kubectl apply -f eks/aws_auth.yaml
+        kubectl apply -f eks/read-group.yaml
+        kubectl apply -f eks/aws-auth.yaml
         kubectl apply -f eks/deployment.yaml
         kubectl apply -f eks/service.yaml
         kubectl apply -f eks/issuer.yaml
