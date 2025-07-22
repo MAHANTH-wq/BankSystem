@@ -6,6 +6,6 @@ metadata:
 data:
   mapRoles: |
     - rolearn: arn:aws:iam::052587224384:role/banksystem-github-action-role
-      username: banksystem-github-action-role
+      username: eks_github_user
       groups:
         - system:masters
