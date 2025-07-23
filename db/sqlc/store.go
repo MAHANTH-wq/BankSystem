@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -279,4 +280,20 @@ func (store *SQLStore) CreateUser(ctx context.Context, arg CreateUserParams) (Us
 		return User{}, err
 	}
 	return user, nil
+}
+
+func (store *SQLStore) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
+	session, err := store.q.CreateSession(ctx, arg)
+	if err != nil {
+		return Session{}, err
+	}
+	return session, err
+}
+
+func (store *SQLStore) GetSession(ctx context.Context, id pgtype.UUID) (Session, error) {
+	session, err := store.q.GetSession(ctx, id)
+	if err != nil {
+		return Session{}, err
+	}
+	return session, err
 }
