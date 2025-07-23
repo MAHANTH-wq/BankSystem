@@ -97,8 +97,9 @@ func addAuthentication(t *testing.T,
 	username string,
 	duration time.Duration,
 ) {
-	token, err := tokenMaker.CreateToken(username, duration)
+	token, tokenPayload, err := tokenMaker.CreateToken(username, duration)
 	require.NoError(t, err)
+	require.NotNil(t, tokenPayload)
 
 	authHeader := fmt.Sprintf("%s %s", authorizationType, token)
 	request.Header.Set(authorizationHeaderKey, authHeader)
