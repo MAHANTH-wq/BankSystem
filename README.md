@@ -1,4 +1,4 @@
-![Simple Bank (1)](https://github.com/user-attachments/assets/8a493c1f-7e8d-4119-aa7d-e99b19c7b228)
+DataBase Schema Diagram can be found here: https://dbdocs.io/mahanth%20kumar%20valluri/bank_system
 
 - Create a new db migration:
 ``` bash
