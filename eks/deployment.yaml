@@ -5,7 +5,7 @@ metadata:
   labels:
     app: bank-system-api
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: bank-system-api
