@@ -103,6 +103,11 @@ func runGrpcGateway(config util.Config, store db.Store) {
 
 	mux.Handle("/", grpcGatewayMux)
 
+	//Run Swagger UI 
+	fs:= http.FileServer(http.Dir("./doc/swagger"))
+
+	mux.Handle("/swagger/", http.StripPrefix("/swagger/",fs))
+
 	listener, err := net.Listen("tcp", config.HttpServerAddress)
 	if err != nil {
 		log.Fatal("cannot create listener")
