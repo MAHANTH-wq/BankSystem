@@ -4,3 +4,5 @@ DataBase Schema Diagram can be found here: https://dbdocs.io/mahanth%20kumar%20v
 ``` bash
 migrate create -ext sql -dir db/migration -seq <migration_name>
 ```
+
+Swagger API Documentation can be found here: https://app.swaggerhub.com/apis/mahanthwq/bank-system/v1
