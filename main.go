@@ -7,14 +7,20 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	db "github.com/mahanth/simplebank/db/sqlc"
 	"github.com/mahanth/simplebank/util"
+	"github.com/rakyll/statik/fs"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/mahanth/simplebank/api"
+	_ "github.com/mahanth/simplebank/doc/statik"
 	"github.com/mahanth/simplebank/gapi"
 	"github.com/mahanth/simplebank/pb"
 
@@ -37,6 +43,8 @@ func main() {
 		panic(err)
 	}
 
+	runDBMigration(config.MigrationURL, config.DBSource)
+
 	store := db.NewStore(dbConnPool)
 
 	go runGrpcGateway(config, store)
@@ -44,6 +52,17 @@ func main() {
 
 }
 
+func runDBMigration(migrationURL string, dbSource string) {
+	migrationObject, err := migrate.New(migrationURL, dbSource)
+	if err != nil {
+		log.Fatal("cannot create new migrate instance:", err)
+	}
+
+	if err = migrationObject.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal("failed to run migrate up: ", err)
+	}
+	log.Println("db migrated successfully")
+}
 func runGrpcServer(config util.Config, store db.Store) {
 
 	server, err := gapi.NewServer(config, store)
@@ -103,10 +122,16 @@ func runGrpcGateway(config util.Config, store db.Store) {
 
 	mux.Handle("/", grpcGatewayMux)
 
-	//Run Swagger UI 
-	fs:= http.FileServer(http.Dir("./doc/swagger"))
+	//Swagger UI
 
-	mux.Handle("/swagger/", http.StripPrefix("/swagger/",fs))
+	statikFS, err := fs.New()
+	if err != nil {
+		log.Fatal("cannot create statik fs: ", err)
+	}
+
+	swaggerHandler := http.StripPrefix("/swagger/", http.FileServer(statikFS))
+
+	mux.Handle("/swagger/", swaggerHandler)
 
 	listener, err := net.Listen("tcp", config.HttpServerAddress)
 	if err != nil {

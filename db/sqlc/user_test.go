@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/mahanth/simplebank/util"
 	"github.com/stretchr/testify/require"
 )
@@ -26,6 +27,40 @@ func TestGetUser(t *testing.T) {
 	require.True(t, user1.LastPasswordChangedAt.Time.IsZero())
 	require.True(t, user2.LastPasswordChangedAt.Time.IsZero())
 	require.Equal(t, user1.HashedPassword, user2.HashedPassword)
+}
+
+func TestUpdateUserFullName(t *testing.T) {
+	user1 := createRandomUser(t)
+
+	arg := UpdateUserParams{
+		Username: user1.Username,
+		FullName: pgtype.Text{String: "updated_" + user1.FullName, Valid: true},
+	}
+	updatedUser, err := testQueries.UpdateUser(context.Background(), arg)
+
+	require.NoError(t, err)
+	require.Equal(t, updatedUser.FullName, "updated_"+user1.FullName)
+	require.Equal(t, updatedUser.Username, user1.Username)
+	require.Equal(t, updatedUser.Email, updatedUser.Email)
+	require.Equal(t, updatedUser.HashedPassword, user1.HashedPassword)
+
+}
+
+func TestUpdateUserEmail(t *testing.T) {
+	user1 := createRandomUser(t)
+
+	arg := UpdateUserParams{
+		Username: user1.Username,
+		Email:    pgtype.Text{String: "updated_" + user1.Email, Valid: true},
+	}
+	updatedUser, err := testQueries.UpdateUser(context.Background(), arg)
+
+	require.NoError(t, err)
+	require.Equal(t, updatedUser.Email, "updated_"+user1.Email)
+	require.Equal(t, updatedUser.Username, user1.Username)
+	require.Equal(t, updatedUser.FullName, updatedUser.FullName)
+	require.Equal(t, updatedUser.HashedPassword, user1.HashedPassword)
+
 }
 
 func createRandomUser(t *testing.T) User {

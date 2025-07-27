@@ -297,3 +297,13 @@ func (store *SQLStore) GetSession(ctx context.Context, id pgtype.UUID) (Session,
 	}
 	return session, err
 }
+
+func (store *SQLStore) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+
+	user, err := store.q.UpdateUser(ctx, arg)
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, err
+}
