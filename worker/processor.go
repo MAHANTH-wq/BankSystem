@@ -5,6 +5,7 @@ import (
 
 	"github.com/hibiken/asynq"
 	db "github.com/mahanth/simplebank/db/sqlc"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -28,6 +29,13 @@ func NewRedisTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) TaskPr
 			QueueCritical: 10,
 			QueueDefault:  5,
 		},
+		ErrorHandler: asynq.ErrorHandlerFunc(func(ctx context.Context, task *asynq.Task, err error) {
+			// Log the error or handle it as needed
+			// For example, you can log it to a file or monitoring system
+			// log.Printf("Error processing task %s: %v", task.Type, err)
+			log.Error().Err(err).Str("task_type", task.Type()).Msg("Error processing task")
+		}),
+		Logger: NewLogger(),
 	})
 
 	return &RedisTaskProcessor{

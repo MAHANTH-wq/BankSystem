@@ -78,7 +78,7 @@ func runTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) {
 	log.Println("start task processor")
 	err := taskProcessor.Start()
 	if err != nil {
-		log.Fatal("error starting the task processor server %s", err)
+		log.Fatal("error starting the task processor server", err)
 	}
 }
 func runGrpcServer(config util.Config, store db.Store, taskDistributor worker.TaskDistributor) {
