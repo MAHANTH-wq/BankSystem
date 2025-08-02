@@ -26,7 +26,7 @@ var File_service_bank_system_proto protoreflect.FileDescriptor
 
 const file_service_bank_system_proto_rawDesc = "" +
 	"\n" +
-	"\x19service_bank_system.proto\x12\x02pb\x1a\x15rpc_create_user.proto\x1a\x15rpc_update_user.proto\x1a\x14rpc_login_user.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xc9\x03\n" +
+	"\x19service_bank_system.proto\x12\x02pb\x1a\x15rpc_create_user.proto\x1a\x15rpc_update_user.proto\x1a\x14rpc_login_user.proto\x1a\x16rpc_verify_email.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xdc\x04\n" +
 	"\n" +
 	"BankSystem\x12\x8e\x01\n" +
 	"\n" +
@@ -34,27 +34,32 @@ const file_service_bank_system_proto_rawDesc = "" +
 	"\tLoginUser\x12\x14.pb.LoginUserRequest\x1a\x15.pb.LoginUserResponse\"f\x92AJ\x12\n" +
 	"Login User\x1a<Use this API to login as a user and get access/refresh token\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/login_user\x12\x86\x01\n" +
 	"\n" +
-	"UpdateUser\x12\x15.pb.UpdateUserRequest\x1a\x16.pb.UpdateUserResponse\"I\x92A,\x12\vUpdate User\x1a\x1dUse this API to update a user\x82\xd3\xe4\x93\x02\x14:\x01*2\x0f/v1/update_userB\x98\x01\x92As\x12q\n" +
+	"UpdateUser\x12\x15.pb.UpdateUserRequest\x1a\x16.pb.UpdateUserResponse\"I\x92A,\x12\vUpdate User\x1a\x1dUse this API to update a user\x82\xd3\xe4\x93\x02\x14:\x01*2\x0f/v1/update_user\x12\x90\x01\n" +
+	"\vVerifyEmail\x12\x16.pb.VerifyEmailRequest\x1a\x17.pb.VerifyEmailResponse\"P\x92A5\x12\fVerify Email\x1a%Use this API to verify a user's email\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/verify_emailB\x98\x01\x92As\x12q\n" +
 	"\x0fBank System API\"Y\n" +
 	"\rMahanth Kumar\x12(https://github.com/MAHANTH-wq/BankSystem\x1a\x1evallulrimahanthkumar@gmail.com2\x031.2Z github.com/mahanth/simplebank/pbb\x06proto3"
 
 var file_service_bank_system_proto_goTypes = []any{
-	(*CreateUserRequest)(nil),  // 0: pb.CreateUserRequest
-	(*LoginUserRequest)(nil),   // 1: pb.LoginUserRequest
-	(*UpdateUserRequest)(nil),  // 2: pb.UpdateUserRequest
-	(*CreateUserResponse)(nil), // 3: pb.CreateUserResponse
-	(*LoginUserResponse)(nil),  // 4: pb.LoginUserResponse
-	(*UpdateUserResponse)(nil), // 5: pb.UpdateUserResponse
+	(*CreateUserRequest)(nil),   // 0: pb.CreateUserRequest
+	(*LoginUserRequest)(nil),    // 1: pb.LoginUserRequest
+	(*UpdateUserRequest)(nil),   // 2: pb.UpdateUserRequest
+	(*VerifyEmailRequest)(nil),  // 3: pb.VerifyEmailRequest
+	(*CreateUserResponse)(nil),  // 4: pb.CreateUserResponse
+	(*LoginUserResponse)(nil),   // 5: pb.LoginUserResponse
+	(*UpdateUserResponse)(nil),  // 6: pb.UpdateUserResponse
+	(*VerifyEmailResponse)(nil), // 7: pb.VerifyEmailResponse
 }
 var file_service_bank_system_proto_depIdxs = []int32{
 	0, // 0: pb.BankSystem.CreateUser:input_type -> pb.CreateUserRequest
 	1, // 1: pb.BankSystem.LoginUser:input_type -> pb.LoginUserRequest
 	2, // 2: pb.BankSystem.UpdateUser:input_type -> pb.UpdateUserRequest
-	3, // 3: pb.BankSystem.CreateUser:output_type -> pb.CreateUserResponse
-	4, // 4: pb.BankSystem.LoginUser:output_type -> pb.LoginUserResponse
-	5, // 5: pb.BankSystem.UpdateUser:output_type -> pb.UpdateUserResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	3, // 3: pb.BankSystem.VerifyEmail:input_type -> pb.VerifyEmailRequest
+	4, // 4: pb.BankSystem.CreateUser:output_type -> pb.CreateUserResponse
+	5, // 5: pb.BankSystem.LoginUser:output_type -> pb.LoginUserResponse
+	6, // 6: pb.BankSystem.UpdateUser:output_type -> pb.UpdateUserResponse
+	7, // 7: pb.BankSystem.VerifyEmail:output_type -> pb.VerifyEmailResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -68,6 +73,7 @@ func file_service_bank_system_proto_init() {
 	file_rpc_create_user_proto_init()
 	file_rpc_update_user_proto_init()
 	file_rpc_login_user_proto_init()
+	file_rpc_verify_email_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -31,7 +31,7 @@ func TestGetAccountAPI(t *testing.T) {
 			name:      "OK",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
+				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, user.Username, user.Role, time.Minute)
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				store.EXPECT().
@@ -49,7 +49,7 @@ func TestGetAccountAPI(t *testing.T) {
 			name:      "NotFound",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
+				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, user.Username, user.Role, time.Minute)
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				store.EXPECT().
@@ -65,7 +65,7 @@ func TestGetAccountAPI(t *testing.T) {
 			name:      "InternalError",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
+				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, user.Username, user.Role, time.Minute)
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				store.EXPECT().
@@ -81,7 +81,7 @@ func TestGetAccountAPI(t *testing.T) {
 			name:      "UnAuthorized User",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, "unauthorizeduser", time.Minute)
+				addAuthentication(t, request, tokenMaker, authorizationTypeBearer, "unauthorizeduser", user.Role, time.Minute)
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				store.EXPECT().
