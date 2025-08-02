@@ -7,6 +7,7 @@ Project bank_system {
 
 TABLE users as U {
   username varcha [pk]
+  role varchar [not null, default: 'depositor', note: 'can be depositor or banker']
   hashed_password varchar [not null]
   full_name varchar [not null]
   email varchar [unique, not null]

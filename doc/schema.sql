@@ -1,9 +1,10 @@
 -- SQL dump generated using DBML (dbml.dbdiagram.io)
 -- Database: PostgreSQL
--- Generated at: 2025-07-31T14:59:12.843Z
+-- Generated at: 2025-08-02T12:39:27.674Z
 
 CREATE TABLE "users" (
   "username" varcha PRIMARY KEY,
+  "role" varchar NOT NULL DEFAULT 'depositor',
   "hashed_password" varchar NOT NULL,
   "full_name" varchar NOT NULL,
   "email" varchar UNIQUE NOT NULL,
@@ -67,6 +68,8 @@ CREATE INDEX ON "transfers" ("from_account_id");
 CREATE INDEX ON "transfers" ("to_account_id");
 
 CREATE INDEX ON "transfers" ("from_account_id", "to_account_id");
+
+COMMENT ON COLUMN "users"."role" IS 'can be depositor or banker';
 
 COMMENT ON COLUMN "verify_emails"."secret_code" IS 'used to verify email';
 

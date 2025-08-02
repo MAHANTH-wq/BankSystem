@@ -153,6 +153,7 @@ func randomUser() (db.User, string) {
 
 	return db.User{
 		Username:       util.RandomString(6),
+		Role:           util.DepositorRole,
 		FullName:       util.RandomString(6),
 		HashedPassword: hashedPassword,
 		Email:          util.RandomEmail(),

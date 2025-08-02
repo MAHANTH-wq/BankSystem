@@ -52,6 +52,7 @@ type User struct {
 	LastPasswordChangedAt pgtype.Timestamptz `json:"last_password_changed_at"`
 	CreatedAt             pgtype.Timestamptz `json:"created_at"`
 	IsEmailVerified       bool               `json:"is_email_verified"`
+	Role                  string             `json:"role"`
 }
 
 type VerifyEmail struct {
