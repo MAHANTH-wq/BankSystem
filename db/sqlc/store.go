@@ -11,6 +11,7 @@ type Store interface {
 	Querier
 	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
 	CreateUserTx(ctx context.Context, arg CreateUserTxParams) (CreateUserTxResult, error)
+	VerifyEmailTx(ctx context.Context, arg VerifyEmailTxParams) (VerifyEmailTxResult, error)
 }
 
 // Inheritance from Queries struct
@@ -237,4 +238,20 @@ func (store *SQLStore) UpdateUser(ctx context.Context, arg UpdateUserParams) (Us
 	}
 
 	return user, err
+}
+
+func (store SQLStore) CreateVerifyEmail(ctx context.Context, arg CreateVerifyEmailParams) (VerifyEmail, error) {
+	verifyEmail, err := store.q.CreateVerifyEmail(ctx, arg)
+	if err != nil {
+		return VerifyEmail{}, err
+	}
+	return verifyEmail, nil
+}
+
+func (store SQLStore) UpdateVerifyEmail(ctx context.Context, arg UpdateVerifyEmailParams) (VerifyEmail, error) {
+	verifyEmail, err := store.q.UpdateVerifyEmail(ctx, arg)
+	if err != nil {
+		return VerifyEmail{}, err
+	}
+	return verifyEmail, nil
 }

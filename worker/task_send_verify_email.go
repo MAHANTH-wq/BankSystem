@@ -6,6 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hibiken/asynq"
+	db "github.com/mahanth/simplebank/db/sqlc"
+	"github.com/mahanth/simplebank/util"
 )
 
 const (
@@ -49,7 +51,29 @@ func (rtp *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Context, t
 		return fmt.Errorf("failed to get user with username %s: %w", payload.Username, err)
 	}
 
-	//todo : send email to user
+	verifyEmail, err := rtp.store.CreateVerifyEmail(ctx, db.CreateVerifyEmailParams{
+		Username:   user.Username,
+		Email:      user.Email,
+		SecretCode: util.RandomString(32),
+	})
+
+	if err != nil {
+		return fmt.Errorf("failed to create verify email for user %s: %w", user.Username, err)
+	}
+
+	subject := "Welcome to Mahanth's Bank System"
+	verifyEmailLink := fmt.Sprintf("http://localhost:8080/v1/verify_email?email_id=%d&secret_code=%s", verifyEmail.ID, verifyEmail.SecretCode)
+	content := fmt.Sprintf("Hello %s,\n\n"+
+		"Please verify your email by clicking the link below:\n"+
+		"%s\n\n"+
+		"Thank you for joining us!\n\n", user.FullName, verifyEmailLink)
+
+	to := []string{user.Email}
+
+	err = rtp.mailer.SendEmail(subject, content, to, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to send verify email to %s: %w", user.Email, err)
+	}
 
 	fmt.Println("process task for user ", user.Username)
 	return nil

@@ -1,0 +1,15 @@
+CREATE TABLE "verify_emails" (
+  "id" bigserial PRIMARY KEY,
+  "username" varchar NOT NULL,
+  "email" varchar NOT NULL,
+  "secret_code" varchar NOT NULL,
+  "is_used" bool NOT NULL DEFAULT false,
+  "expired_at" timestamptz NOT NULL DEFAULT (now() + interval '15 minutes'),
+  "created_at" timestamptz NOT NULL DEFAULT (now())
+);
+
+COMMENT ON COLUMN "verify_emails"."secret_code" IS 'used to verify email';
+
+ALTER TABLE "verify_emails" ADD FOREIGN KEY ("username") REFERENCES "users" ("username");
+
+ALTER TABLE "users" ADD COLUMN "is_email_verified" bool NOT NULL DEFAULT false;
